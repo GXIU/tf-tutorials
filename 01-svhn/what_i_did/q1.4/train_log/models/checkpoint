@@ -1,0 +1,6 @@
+model_checkpoint_path: "epoch-60-17160"
+all_model_checkpoint_paths: "epoch-52-14872"
+all_model_checkpoint_paths: "epoch-54-15444"
+all_model_checkpoint_paths: "epoch-56-16016"
+all_model_checkpoint_paths: "epoch-58-16588"
+all_model_checkpoint_paths: "epoch-60-17160"

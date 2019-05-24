@@ -7,6 +7,3 @@ Please download the vgg16 model at:
 
 https://pan.baidu.com/s/1ZhxAzkEuplecdzOkv-X0RQ
 The verification code is d8rk
-
-
-

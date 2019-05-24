@@ -1,0 +1,203 @@
+\documentclass[12pt]{extarticle}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{cite}
+
+\title{Deep Learning Homework 1}
+\author{Gezhi Xiu\\1801110566}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{baseline model}
+
+We used softmax as a baseline normalizing function here. 
+
+The results is shown in \ref{table:1}
+
+	\begin{table}[h]
+		\centering
+	\begin{tabular}{ |c| c| c |}
+		\hline
+		average loss & average accuracy \\ 
+		\hline
+		0.395 & 0.943 \\  
+		\hline
+	\end{tabular}
+
+\caption{Results for baseline model after 30 epoches.}
+\label{table:1}
+\end{table}
+
+\section{alternatives of softmax}
+
+Softmax is a function that put all the features together with the exponential functions which makes the most important feature dominant. Softmax function has the form like $$\text{softmax}(x_i) = \frac{e^{x_i}}{\sum_j e^{x_j}}$$ In this section, we are going to alternate it with some other forms of normalizers.
+
+\subsection{abs-max}
+
+The form of abs-max is $$\text{abs-max}(x_i) = \frac{|x_i|}{\sum_j |x_j|}.$$
+
+The results is shown in \ref{table:2}
+
+	\begin{table}[h]
+		\centering
+	\begin{tabular}{ |c| c|}
+		\hline
+		average loss & average accuracy \\ 
+		\hline
+		0.394 & 0.659 \\  
+		\hline
+	\end{tabular}
+
+\caption{Results for abs-max model after 30 epoches.}
+\label{table:2}
+\end{table}
+
+It is totally not working as well as Softmax.
+
+\subsection{square-max}
+
+The form of square-max is $$\text{square-max}(x_i) = \frac{x_i^2}{\sum_j x_j^2}.$$
+
+The results is shown in \ref{table:3}
+
+	\begin{table}[h]
+		\centering
+	\begin{tabular}{ |c| c|}
+		\hline
+		average loss & average accuracy \\ 
+		\hline
+		0.394 & 0.573 \\  
+		\hline
+	\end{tabular}
+
+\caption{Results for square-max model after 30 epoches.}
+\label{table:3}
+\end{table}
+
+It is even worse than abs-max. So it is not an appropriate way to substitute softmax.
+
+\subsection{plus-one-abs-max}
+
+The form of plus-one-abs-max is $$\text{plus-one-abs-max}(x_i) = \frac{1+|x_i|}{\sum_j |1+x_j|}.$$
+
+The results is shown in \ref{table:4}
+
+	\begin{table}[h]
+		\centering
+	\begin{tabular}{ |c| c|}
+		\hline
+		average loss & average accuracy \\ 
+		\hline
+		0.399 & 0.558 \\  
+		\hline
+	\end{tabular}
+
+\caption{Results for plus-one-abs-max model after 30 epoches.}
+\label{table:4}
+\end{table}
+
+The results is still rather poor.
+
+\subsection{non-negative-max}
+
+The form of non-negative-max is $$\text{non-negative-max}(x_i) = \frac{\max(x_i,0)}{\sum_j \max(x_i,0)}.$$
+
+The results is shown in \ref{table:5}
+
+	\begin{table}[h]
+		\centering
+	\begin{tabular}{ |c| c|}
+		\hline
+		average loss & average accuracy \\ 
+		\hline
+		0.498 & 0.943 \\  
+		\hline
+	\end{tabular}
+
+\caption{Results for non-negative-max model after 60 epoches.}
+\label{table:5}
+\end{table}
+
+I accidentally trained the model with 60 epoches. But the result was also better at the 30th epoch. than the 3 previous ones. So I found out that the best substitute for softmax is this non-negative-max function! 
+
+\section{Regression vs Classification}
+
+In this part, I changed cross entropy loss to the square of Euclidean distance between model predicted probability and one hot vector of the true label. The model converges faster than before. And we got a result like 
+\begin{table}[h]
+	\centering
+\begin{tabular}{ |c| c|}
+	\hline
+	average loss & average accuracy \\ 
+	\hline
+	0.008 & 0.949 \\  
+	\hline
+\end{tabular}
+
+\caption{Results for square of Euclidean distance loss function.}
+\label{table:6}
+\end{table}
+
+\section{$\mathcal{L}_p$ pooling}
+
+Here, we changed the pooling function to $\mathcal{L}_p$ pooling. And assume that $p=2$ by default. I found that the model couldn't catch the features properly at the beginning, but developing fast later on, and finally get a result are shown in the following table:
+\begin{table}[h]
+	\centering
+\begin{tabular}{ |c| c|}
+	\hline
+	average loss & average accuracy \\ 
+	\hline
+	0.037 & 0.766 \\  
+	\hline
+\end{tabular}
+
+\caption{Results for $\mathcal{L}_2$ pooling.}
+\label{table:7}
+\end{table}
+
+\section{Regularization}
+
+\subsection{$\mathcal{L}_p$ regularization with different $p$}
+
+Here, I experimented $p = 3$ or $p=4$ to compare with $p=2$ in the baseline model.
+\begin{table}[h]
+	\centering
+\begin{tabular}{ |c|c| c|}
+	\hline
+	p & average loss & average accuracy \\ 
+	\hline
+	2 & 0.395 & 0.943\\
+	\hline
+	3 & 0.009 & 0.946 \\  
+	\hline
+	4 & 0.008 & 0.947 \\  
+	\hline
+\end{tabular}
+
+\caption{Results for $\mathcal{L}_p$ regularization.}
+\label{table:8}
+\end{table}
+
+and we saved the best result in q4.1. 
+
+\subsection{Setting Lp regularization to a minus number.}
+
+Surprisingly, the result for this change sometimes is fascinating. It exceeded 95\% at some epoches.
+\begin{table}[h]
+	\centering
+\begin{tabular}{ |c| c|}
+	\hline
+	average loss & average accuracy \\ 
+	\hline
+	0.008 & 0.949 \\  
+	\hline
+\end{tabular}
+
+\caption{Results for setting $\mathcal{L}_p$ regularization to a minus number.}
+\label{table:9}
+\end{table}
+
+
+\end{document}
